@@ -8,7 +8,9 @@ const app = express();
 
 const PORT = process.env.PORT;
 
+app.use(express.json());
 
+app.use(require('./routes/auth')); // here we link the route files // working as a middleware
 
 const middleware = (req, res, next) =>{
     console.log("Middleware Speaking");
