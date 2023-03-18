@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const express = require('express');
+const bcrypt = require('bcryptjs');
 const router = express.Router();
 
 require('../db/conn');
@@ -81,14 +82,21 @@ router.post("/signin", async (req, res)=>{
         const userExists = await User.findOne({email: email});
         
         if(userExists){
-            console.log(userExists);
-            if(userExists.password !== password){
-                return res.status(401).json({error: "Invalid credentials!"}); 
+            // console.log(userExists);
+            // if(userExists.password !== password){
+            //     return res.status(401).json({error: "Invalid credentials!"}); 
+            // }else{
+            //     return res.status(200).json({message: "Welcome!"});
+            // }
+            const isMatch = await bcrypt.compare(password, userExists.password);
+
+            if(!isMatch){
+                 res.status(400).json({error: "Invalid Credentials"});
             }else{
-                return res.status(200).json({message: "Welcome!"});
+                 res.status(400).json({message: "Successfully Logged In"});
             }
         }else{
-            return res.status(400).json({error: "No such user Exists"});
+             res.status(400).json({error: "No such user Exists"});
         }
     }catch(err){
         console.log("Error: " + err);
