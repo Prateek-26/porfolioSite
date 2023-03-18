@@ -8,7 +8,7 @@ const app = express();
 
 const PORT = process.env.PORT;
 
-app.use(express.json());
+app.use(express.json()); // so that express can understand JSON
 
 app.use(require('./routes/auth')); // here we link the route files // working as a middleware
 
@@ -17,7 +17,7 @@ const middleware = (req, res, next) =>{
     // next();
 }
 
-app.get("/", (req, res)=>{
+app.get("/", middleware,(req, res)=>{
     console.log("Working!");
     res.send("Hello Home");
 });

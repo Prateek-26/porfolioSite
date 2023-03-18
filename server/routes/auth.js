@@ -1,3 +1,4 @@
+const { Router } = require('express');
 const express = require('express');
 const router = express.Router();
 
@@ -46,12 +47,11 @@ router.post('/register', async (req, res)=>{
     const {name, email, phone, work, password, cpassword} = req.body; // Destructuring the object
 
     if(!name || !email || !phone || !work || !password || !cpassword){
-        return res.status(422).json({error:" Please fill all datafields!"});
+        return res.status(422).json({error:"Please fill all datafields!"});
     }
 
     try{
-
-        const userExists = await User.findOne({email: email});
+        const userExists = await User.findOne({email: email});  // returns a boolean value
 
         if(userExists){
             return res.status(422).json({error: "User already exists"});
@@ -63,6 +63,34 @@ router.post('/register', async (req, res)=>{
         res.status(201).json({message: "user registered successfullly"});
 
     } catch(err){
+        console.log("Error: " + err);
+    }
+});
+
+//login route
+
+router.post("/signin", async (req, res)=>{
+    // console.log("Yeah ive been reached!");
+    const {email, password} = req.body;
+
+    if(!email || !password){
+        return res.status(400).json({error: "Please enter both the credentials!"});
+    }
+
+    try{
+        const userExists = await User.findOne({email: email});
+        
+        if(userExists){
+            console.log(userExists);
+            if(userExists.password !== password){
+                return res.status(401).json({error: "Invalid credentials!"}); 
+            }else{
+                return res.status(200).json({message: "Welcome!"});
+            }
+        }else{
+            return res.status(400).json({error: "No such user Exists"});
+        }
+    }catch(err){
         console.log("Error: " + err);
     }
 });
