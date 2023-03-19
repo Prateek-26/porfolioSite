@@ -8,6 +8,7 @@ const app = express();
 
 const PORT = process.env.PORT;
 
+// Allow JSON data to make communication with API. Allow the JSON data in a request by adding middleware for the body parser.
 app.use(express.json()); // so that express can understand JSON
 
 app.use(require('./routes/auth')); // here we link the route files // working as a middleware

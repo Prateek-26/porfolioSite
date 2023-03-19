@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const express = require('express');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const router = express.Router();
 
 require('../db/conn');
@@ -89,6 +90,15 @@ router.post("/signin", async (req, res)=>{
             //     return res.status(200).json({message: "Welcome!"});
             // }
             const isMatch = await bcrypt.compare(password, userExists.password);
+
+            const token = await userExists.generateAuthToken(); // here we are giving a function call to the methods of userExist ( or to be more specific, the Schema on which userExists is build on);
+            console.log(token);
+
+            //storing token inside the cookie
+            res.cookie('jwtoken', token, {
+                expires: new Date(Date.now() + 25892000000),
+                httpOnly: true
+            });
 
             if(!isMatch){
                  res.status(400).json({error: "Invalid Credentials"});
