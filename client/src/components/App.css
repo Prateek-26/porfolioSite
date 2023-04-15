@@ -71,3 +71,71 @@ body{
     overflow: hidden;
     padding-bottom: 1rem;
 }
+
+/* ContactUs */
+
+.contact-page{
+    /* background: ; */
+    padding: 2rem;
+}
+.get-in-touch-container{
+    padding: 1rem 4rem;
+    margin-top: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.get-in-touch-container form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem;
+    box-shadow: 0 0 10px 0 gray;
+    border-radius: 10px;
+    min-width: 300px;
+}
+.get-in-touch-content{
+    max-width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+}
+.get-in-touch-content h1{
+    margin-bottom: 2rem;
+}
+.contact-container-items{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1rem;
+}
+.contact-container-items .col-sm-3{
+    min-width: 250px;
+    max-width: 350px;
+    margin: 1rem 2.5rem;
+}
+.contact-container-items .col-sm-2{
+    min-width: 150px;
+    max-width: 200px;
+    margin: 1rem;
+}
+.contact-container-item{
+    padding: 0.5rem 1rem;
+    text-align: left;
+    box-shadow: 0 0 5px 0 gray;
+}
+.contact-container-item .contact-item-title{
+    margin-bottom: 0.2rem;
+}
+
+
+.mssg-container{
+    width: 100%;
+    /* padding: 0 4rem; */
+    margin-bottom: 2rem;
+    justify-content: center;
+}
+.mssg-container textarea{
+    max-width: 800px;
+}
