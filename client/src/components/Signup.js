@@ -11,21 +11,27 @@ function Signup(){
                         <h1>REGISTER</h1>
                             <form>
                             <div class="mb-3">
+                            <i class="fa-solid fa-user"></i>
                                 <input type="text" class="form-control shadow-none" id="name" placeholder="Your Name" name="name" required  />
                             </div>
                             <div class="mb-3">
+                            <i class="fa-solid fa-envelope"></i>
                                 <input type="email" class="form-control shadow-none" placeholder="Your Email" name="email" required  />
                             </div>
                             <div class="mb-3">
+                            <i class="fa-solid fa-phone"></i>
                                 <input type="number" class="form-control shadow-none" id="phone" placeholder="Mobile Number" name="phone" required />
                             </div>
                             <div class="mb-3">
+                            <i class="fa-solid fa-user-tie"></i>
                                 <input type="text" class="form-control shadow-none" name="job" placeholder="Your Profession" required  />
                             </div>
                             <div class="mb-3">
+                            <i class="fa-solid fa-lock"></i>
                                 <input type="password" class="form-control shadow-none" placeholder="Password" name="pword" required  />
                             </div>
                             <div class="mb-3">
+                            
                                 <input type="password" class="form-control shadow-none" placeholder="Confirm your password" name="cpword"  required />
                             </div>
                             <button type="submit" className="btn btn-primary" name="register-btn">Register</button>

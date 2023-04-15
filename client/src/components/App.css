@@ -43,6 +43,15 @@ body{
     border-bottom: 2px solid black;
     outline: none;
 }
+.mb-3{
+    position: relative;
+}
+.signup-form i{
+    position: absolute;
+    top: 30%;
+    left: -25px;
+    font-size: 1.2rem;
+}
 .signup-form button{
     margin-top: 1rem;
 }
