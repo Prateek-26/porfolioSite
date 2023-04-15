@@ -174,3 +174,73 @@ body{
 .home-bg .right{
     background: rgb(249, 246, 255);
 }
+
+/* ABout-Us */
+
+.emp-profile{
+    padding: 4rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.emp-profile form{
+    max-width: 600px;
+    padding: 2rem;
+}
+
+.profile-work-links h6{
+    margin: 2rem 0 3rem 0;
+}
+.profile-work-links a{
+    text-decoration: none;
+}
+.profile-work-links h5{
+    margin-bottom: 1rem;
+}
+
+.tabs{
+    /* background: #000; */
+    margin: 1.5rem;
+    /* margin-left: 2rem; */
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 400px;
+}
+
+.tabs__label{
+    padding: 10px 16px;
+    cursor: pointer;
+}
+
+.tabs__radio{
+    display: none;
+}
+
+.tabs__content{
+    order: 1;
+    width: 100%;
+    display: none;
+}
+
+.tabs__radio:checked+.tabs__label{
+    font-weight: bold;
+    color: blue;
+}
+
+.tabs__radio:checked+.tabs__label+.tabs__content{
+    display: initial;
+}
+.tabs__content_content{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+}
+
+.about-title{
+    padding: 1rem;
+    margin-right: 3rem;
+    min-width: 100px;
+}
