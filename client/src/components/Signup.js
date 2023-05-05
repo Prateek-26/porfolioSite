@@ -4,7 +4,6 @@ import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Signup() {
-
   const history = useNavigate();
 
   const [user, setUser] = useState({
@@ -28,25 +27,21 @@ function Signup() {
   const PostData = async (e) => {
     e.preventDefault();
 
-    const { name, email, phone, work, password, cpassword } = user;
-
-    // let respose;
-
     try {
       const response = await axios.post("http://localhost:8080/signup", {
         user,
       });
       console.log(response);
 
-      if(response.status === 201){
+      if (response.status === 201) {
         console.log("Successfull Registration");
         window.alert("Successfull Registration!");
-        history("/login");
+        history("/signin");
       }
-      
     } catch (error) {
       console.log("Error (React):" + error);
-      window.alert("Registration Unsuccessfull")
+      window.alert("Registration Unsuccessfull");
+      history("/signup");
     }
   };
 

@@ -1,18 +1,14 @@
-const { Router } = require('express');
-const express = require('express');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const { Router } = require("express");
+const express = require("express");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const router = express.Router();
 
-require('../db/conn');
-const User = require('../model/userSchema');
-
-// router.get('/', (req, res)=>{
-//     res.send("From Router");
-// });
-
+require("../db/conn");
+const User = require("../model/userSchema");
 
 //// **** Using Promises: Storing data online ****
+
 // router.post('/register', (req, res)=>{
 
 //     const {name, email, phone, work, password, cpassword} = req.body; // Destructuring the object
@@ -44,81 +40,89 @@ const User = require('../model/userSchema');
 // });
 
 // **** Using Async Await ****
-router.post('/signup', async (req, res)=>{
 
-    console.log(req.body);
+// **** SIGNUP ****
 
-    console.log("dfasdfasf");
+router.post("/signup", async (req, res) => {
+  console.log(req.body);
 
-    const {name, email, phone, work, password, cpassword} = req.body.user; // Destructuring the object
-    console.log(name + email + phone + work + password + cpassword);
+  const { name, email, phone, work, password, cpassword } = req.body.user; // Destructuring the object
 
-    if(!name || !email || !phone || !work || !password || !cpassword){
-        // console.log("all creds not provided!");
-        return res.status(422).json({error:"Please fill all datafields!"});
+  if (!name || !email || !phone || !work || !password || !cpassword) {
+    return res.status(422).json({ error: "Please fill all datafields!" });
+  }
+
+  try {
+    const userExists = await User.findOne({ email: email }); // returns a boolean value
+
+    if (userExists) {
+      console.log("User exists");
+      return res.status(422).json({ error: "User already exists" });
     }
 
-    try{
-        const userExists = await User.findOne({email: email});  // returns a boolean value
+    const user = new User({ name, email, phone, work, password, cpassword }); // es6 allows that if both  key & value have same names, then it
 
-        if(userExists){
-            console.log("User exists");
-            return res.status(422).json({error: "User already exists"});
-        }
-
-        const user = new User({name, email, phone, work, password, cpassword});  // es6 allows that if both  key & value have same names, then it 
-
-        const userRegistered = await user.save();
-        console.log("New User");
-        res.status(201).json({message: "user registered successfullly", userSaved: userRegistered});
-
-    } catch(err){
-        console.log("Error: " + err);
-    }
+    const userRegistered = await user.save();
+    console.log("New User");
+    res.status(201).json({
+      message: "user registered successfullly",
+      userSaved: userRegistered,
+    });
+  } catch (err) {
+    console.log("Error: " + err);
+  }
 });
 
-//login route
+// **** SIGNIN ****
 
-router.post("/signin", async (req, res)=>{
-    // console.log("Yeah ive been reached!");
-    const {email, password} = req.body;
+router.post("/signin", async (req, res) => {
+  console.log(req.body);
 
-    if(!email || !password){
-        return res.status(400).json({error: "Please enter both the credentials!"});
+  const { email, password } = req.body.userkey;
+
+  if (!email || !password) {
+    console.log("provide all details");
+    return res
+      .status(400)
+      .json({ error: "Please enter both the credentials!" });
+  }
+
+  try {
+    const userExists = await User.findOne({ email: email });
+
+    if (userExists) {
+      const isMatch = await bcrypt.compare(password, userExists.password); // returns a bool value
+
+      console.log(`is match: ${isMatch}`);
+
+      const token = await userExists.generateAuthToken(); // here we are giving a function call to the methods of userExist ( or to be more specific, the Schema on which userExists is build on);
+      console.log(token);
+
+      //storing token inside the cookie
+      res.cookie("jwtoken", token, {
+        httpOnly: true,
+        sameSite: "strict",
+        expires: new Date(new Date().getTime() + 5000 * 1000), // Can tweak this
+      });
+
+      if (!isMatch) {
+        res.status(400).json({ error: "Invalid Credentials" });
+        console.log("invalidddd");
+      } else {
+        res.status(200).json({
+          message: "Successfully Logged In",
+          token: token,
+          loggedUser: userExists,
+        });
+        console.log("Successfull");
+      }
+    } else {
+      console.log("No such user Exists");
+      res.status(400).json({ error: "No such user Exists" });
     }
-
-    try{
-        const userExists = await User.findOne({email: email});
-        
-        if(userExists){
-            // console.log(userExists);
-            // if(userExists.password !== password){
-            //     return res.status(401).json({error: "Invalid credentials!"}); 
-            // }else{
-            //     return res.status(200).json({message: "Welcome!"});
-            // }
-            const isMatch = await bcrypt.compare(password, userExists.password);
-
-            const token = await userExists.generateAuthToken(); // here we are giving a function call to the methods of userExist ( or to be more specific, the Schema on which userExists is build on);
-            console.log(token);
-
-            //storing token inside the cookie
-            res.cookie('jwtoken', token, {
-                expires: new Date(Date.now() + 25892000000),
-                httpOnly: true
-            });
-
-            if(!isMatch){
-                 res.status(400).json({error: "Invalid Credentials"});
-            }else{
-                 res.status(400).json({message: "Successfully Logged In", token: token, loggedUser: userExists});
-            }
-        }else{
-             res.status(400).json({error: "No such user Exists"});
-        }
-    }catch(err){
-        console.log("Error: " + err);
-    }
+  } catch (err) {
+    console.log("Error: " + err);
+  }
 });
 
 module.exports = router;
