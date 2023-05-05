@@ -27,11 +27,11 @@ function Contact(){
                 <form action="">
                 <div className="row contact-container-items">
 
-                                <input type="text" class="form-control shadow-none col-sm-2" id="name" placeholder="Your Name" name="name" required  />
+                                <input type="text" className="form-control shadow-none col-sm-2" id="name" placeholder="Your Name" name="name" required  />
 
-                                <input type="email" class="form-control shadow-none col-sm-2" placeholder="Your Email" name="email" required  />
+                                <input type="email" className="form-control shadow-none col-sm-2" placeholder="Your Email" name="email" required  />
                         
-                                <input type="number" class="form-control shadow-none col-sm-2" id="phone" placeholder="Your Mobile Number" name="phone" required />
+                                <input type="number" className="form-control shadow-none col-sm-2" id="phone" placeholder="Your Mobile Number" name="phone" required />
 
                     </div>
             <div className="row mssg-container">

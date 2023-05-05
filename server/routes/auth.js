@@ -7,9 +7,9 @@ const router = express.Router();
 require('../db/conn');
 const User = require('../model/userSchema');
 
-router.get('/', (req, res)=>{
-    res.send("From Router");
-});
+// router.get('/', (req, res)=>{
+//     res.send("From Router");
+// });
 
 
 //// **** Using Promises: Storing data online ****
@@ -44,11 +44,17 @@ router.get('/', (req, res)=>{
 // });
 
 // **** Using Async Await ****
-router.post('/register', async (req, res)=>{
+router.post('/signup', async (req, res)=>{
 
-    const {name, email, phone, work, password, cpassword} = req.body; // Destructuring the object
+    console.log(req.body);
+
+    console.log("dfasdfasf");
+
+    const {name, email, phone, work, password, cpassword} = req.body.user; // Destructuring the object
+    console.log(name + email + phone + work + password + cpassword);
 
     if(!name || !email || !phone || !work || !password || !cpassword){
+        // console.log("all creds not provided!");
         return res.status(422).json({error:"Please fill all datafields!"});
     }
 
@@ -56,13 +62,15 @@ router.post('/register', async (req, res)=>{
         const userExists = await User.findOne({email: email});  // returns a boolean value
 
         if(userExists){
+            console.log("User exists");
             return res.status(422).json({error: "User already exists"});
         }
 
         const user = new User({name, email, phone, work, password, cpassword});  // es6 allows that if both  key & value have same names, then it 
 
         const userRegistered = await user.save();
-        res.status(201).json({message: "user registered successfullly"});
+        console.log("New User");
+        res.status(201).json({message: "user registered successfullly", userSaved: userRegistered});
 
     } catch(err){
         console.log("Error: " + err);
@@ -103,7 +111,7 @@ router.post("/signin", async (req, res)=>{
             if(!isMatch){
                  res.status(400).json({error: "Invalid Credentials"});
             }else{
-                 res.status(400).json({message: "Successfully Logged In"});
+                 res.status(400).json({message: "Successfully Logged In", token: token, loggedUser: userExists});
             }
         }else{
              res.status(400).json({error: "No such user Exists"});

@@ -6,6 +6,7 @@ import Login from './Login';
 import Signup from './Signup';
 import { Route, Routes } from 'react-router-dom';
 import Home from './Home';
+import Errorpage from './Errropage';
 import './App.css'
 function App(){
   return(
@@ -17,6 +18,7 @@ function App(){
       <Route path='/contact' element={<Contact />}></Route>
       <Route path='/login' element={<Login />}></Route>
       <Route path='/signup' element={<Signup />}></Route>
+      <Route path="*" element={<Errorpage />}></Route>
       </Routes>
 
 
