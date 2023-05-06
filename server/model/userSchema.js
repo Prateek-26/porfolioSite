@@ -49,12 +49,17 @@ userSchema.pre("save", async function (next) {
 userSchema.methods.generateAuthToken = async function () {
   try {
     // here we'll generate the token;
-    let token = jwt.sign({ _id: this._id }, process.env.SECRET_KEY);
-
+    // token_id, justForFunId these cd be named anything! and is what the token will contain, with an automatic addition of _id
+    let signedToken = jwt.sign(
+      { signed_token_by_jwt: this._id, justForFunId: "FunID" },
+      process.env.SECRET_KEY
+    );
+    console.log("Token Created By generateAuthToken Method\n: " + signedToken);
     // now we need to add the above token to the userSchema
-    this.tokens = this.tokens.concat({ token: token });
+    this.tokens = this.tokens.concat({ token: signedToken });
     await this.save();
-    return token; // will be used in the auth.js section
+
+    return signedToken; // will be used in the auth.js section
   } catch (err) {
     console.log("Error: " + err);
   }

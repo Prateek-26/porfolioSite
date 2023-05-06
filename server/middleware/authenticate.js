@@ -3,29 +3,34 @@ const User = require("../model/userSchema");
 
 const authenticate = async (req, res, next) => {
   try {
-    console.log("Intoo Middleware");
-    const token = req.cookies.jwtoken;
-    const verifyToken = jwt.verify(token, SECRET_KEY);
-    console.log(verifyToken); // Will give you the user_id
+    console.log("In Middleware(MDW)");
+    const tokenFromCookie = req.cookies.jwtoken;
+    console.log(`token from cookies(MDW): ${token}`);
+    const verifiedToken = jwt.verify(token, process.env.SECRET_KEY); //will return the contents of the token
+    console.log(`deserialized token from cookie(MDW): \n ${verifiedToken}`);
 
-    const rootUser = await User.findOne({_id: verifyToken._id, "tokens.token": token});
+    const rootUser = await User.findOne({
+      _id: verifiedToken.signed_token_by_jwt,
+      "tokens.token": tokenFromCookie,
+    });
+    // Now this rootUser is the one that actually logged in.
+    // rootUser will now contain all the data about the user
+    // console.log(`rootUser: ${rootUser}`);
 
-    if(!rootUser){
-        throw new Error('User not found')
+    if (!rootUser) {
+      console.log("No Such User Found!");
+      throw new Error("User not found");
     }
 
-    // req.token = token;
-    // req.rootUser = rootUser;
-    // req.userID = rootUser._id;
+    req.token = tokenFromCookie;
+    req.rootUser = rootUser;
+    req.userID = rootUser._id;
 
     next();
-
   } catch (error) {
+    console.log(`Error(MDW) - authenticate: ${error}`);
     res.status(401).send("Unauthorized Token Sent");
-    console.log(`Error from middleware - authenticate: ${error}`);
   }
-
-  
 };
 
 module.exports = authenticate;

@@ -64,7 +64,8 @@ router.post("/signup", async (req, res) => {
     const user = new User({ name, email, phone, work, password, cpassword }); // es6 allows that if both  key & value have same names, then it
 
     const userRegistered = await user.save();
-    console.log("New User");
+    console.log("New User Registered Successfully");
+
     res.status(201).json({
       message: "user registered successfullly",
       userSaved: userRegistered,
@@ -131,7 +132,9 @@ router.post("/signin", async (req, res) => {
 });
 
 router.get('/about', authenticate, (req, res)=>{
-console.log("Into about");
+console.log("Entered out of middleware of /about");
+console.log(`ITEMS RX FROM MIDDLEWARE: ${req.token} + ${req.rootUser} + ${req.userID}`);
+res.status(200).send(req.rootUser);
 })
 
 module.exports = router;
