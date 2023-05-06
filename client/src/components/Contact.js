@@ -1,6 +1,31 @@
-import React from "react";
+import React, { useState, useEffect} from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Contact(){
+    const history = useNavigate();
+  const [user, setUser] = useState({});
+
+  const callContactPage = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/getdata", {
+        withCredentials: true,
+      });
+      console.log(response.data);
+    setUser(response.data)
+      if (!response.status === 200) {
+        //   history("/signin");
+        console.log("Error Detected");
+      }
+    } catch (error) {
+      console.log(error);
+    //   history("/signin");
+    }
+  };
+
+  useEffect(() => {
+    callContactPage();
+  }, []);
     return(
         <>
             <section className="contact-page">
@@ -8,11 +33,11 @@ function Contact(){
                 <div className="row contact-container-items">
                 <div className="col-sm-3 contact-container-item">
                     <div className="contact-item-title">Phone</div>
-                    <div className="contact-item-content">9096091326</div>
+                    <div className="contact-item-content">{user.phone}</div>
                 </div>
                 <div className="col-sm-3 contact-container-item">
                 <div className="contact-item-title">Email</div>
-                    <div className="contact-item-content">test@gmail.com</div>                   
+                    <div className="contact-item-content">{user.email}</div>                   
                 </div>
                 <div className="col-sm-3 contact-container-item">
                 <div className="contact-item-title">Address</div>
@@ -27,11 +52,11 @@ function Contact(){
                 <form action="">
                 <div className="row contact-container-items">
 
-                                <input type="text" className="form-control shadow-none col-sm-2" id="name" placeholder="Your Name" name="name" required  />
+                                <input type="text" className="form-control shadow-none col-sm-2" id="name" value={user.name} placeholder="Your Name" name="name" required  />
 
-                                <input type="email" className="form-control shadow-none col-sm-2" placeholder="Your Email" name="email" required  />
+                                <input type="email" className="form-control shadow-none col-sm-2" value={user.email}  placeholder="Your Email" name="email" required  />
                         
-                                <input type="number" className="form-control shadow-none col-sm-2" id="phone" placeholder="Your Mobile Number" name="phone" required />
+                                <input type="number" className="form-control shadow-none col-sm-2" id="phone" value={user.phone}  placeholder="Your Mobile Number" name="phone" required />
 
                     </div>
             <div className="row mssg-container">

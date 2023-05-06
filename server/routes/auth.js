@@ -135,6 +135,11 @@ router.get('/about', authenticate, (req, res)=>{
 console.log("Entered out of middleware of /about");
 // console.log(`ITEMS RX FROM MIDDLEWARE: ${req.token} + ${req.rootUser} + ${req.userID}`);
 res.status(200).send(req.rootUser);
+});
+
+router.get('/getdata', authenticate, (req, res)=>{
+  console.log("Entered out of middleware of /contact");
+  res.status(200).send(req.rootUser);
 })
 
 module.exports = router;
