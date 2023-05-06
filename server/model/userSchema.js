@@ -35,6 +35,31 @@ const userSchema = new mongoose.Schema({
       },
     },
   ],
+  // added the below two when was handling contact form
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+  messages: [
+    {
+      name: {
+        type: String,
+        required: true,
+      },
+      email: {
+        type: String,
+        required: true,
+      },
+      phone: {
+        type: Number,
+        required: true,
+      },
+      message: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
 });
 
 userSchema.pre("save", async function (next) {
@@ -64,6 +89,19 @@ userSchema.methods.generateAuthToken = async function () {
     console.log("Error: " + err);
   }
 };
+
+userSchema.methods.addMessage = async function(name, email, phone, message){
+  console.log("Inside the addMessage");
+  try {
+    this.messages = this.messages.concat({name, email, phone, message})
+    console.log(this.messages);
+    await this.save();
+    return this.messages;
+  } catch (error) {
+    console.log("Error inside addMessage method: ");
+    console.log(error);
+  }
+}
 
 const User = mongoose.model("User", userSchema);
 

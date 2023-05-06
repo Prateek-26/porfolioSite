@@ -5,9 +5,9 @@ const authenticate = async (req, res, next) => {
   try {
     console.log("In Middleware(MDW)");
     const tokenFromCookie = req.cookies.jwtoken;
-    console.log(`token from cookies(MDW): ${tokenFromCookie}`);
+    // console.log(`token from cookies(MDW): ${tokenFromCookie}`);
     const verifiedToken = jwt.verify(tokenFromCookie, process.env.SECRET_KEY); //will return the contents of the token
-    console.log(`deserialized token from cookie(MDW): \n ${verifiedToken}`);
+    // console.log(`deserialized token from cookie(MDW): \n ${verifiedToken}`);
 
     const rootUser = await User.findOne({
       _id: verifiedToken.signed_token_by_jwt,
@@ -26,7 +26,7 @@ const authenticate = async (req, res, next) => {
     req.rootUser = rootUser;
     req.userID = rootUser._id;
 
-    console.log(req.rootUser);
+    // console.log(req.rootUser);
 
     next();
   } catch (error) {

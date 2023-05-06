@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Contact() {
-  // const history = useNavigate();
-  const [user, setUser] = useState({name: "", email: "", phone: "", message: ""});
-  //   const
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
+  //   We did the above as we dont need entire data (pword, tokens, ..etc)here!
 
   const callContactPage = async () => {
     try {
@@ -13,14 +16,20 @@ function Contact() {
         withCredentials: true,
       });
       console.log(response.data);
-      setUser({...user, name: response.data.name, email: response.data.email, phone: response.data.phone});
+      // This has the actual user data
+      setUser({
+        ...user,
+        name: response.data.name,
+        email: response.data.email,
+        phone: response.data.phone,
+      });
+      // we set/update the user state with the data rx from axios.get request.
+      // cant set message, as we dont get it from the axios.get request
       if (!response.status === 200) {
-        //   history("/signin");
         console.log("Error Detected");
       }
     } catch (error) {
       console.log(error);
-      //   history("/signin");
     }
   };
 
@@ -29,12 +38,31 @@ function Contact() {
   }, []);
 
   //   Storing data inside state
-  const handleInputs = (e) => {
+  const handleInputs = async (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    setUser({...user, [name]: value})
+    setUser({ ...user, [name]: value });
+    // we keep on updating the values here, which would be further sent to the backend.
   };
 
+  //   Sending the data to Backend
+  const contactForm = async (e) => {
+    e.preventDefault();
+
+    const { name, email, phone, message } = user;
+
+    const res = await axios
+      .post("http://localhost:8080/contact", {
+        name,
+        email,
+        phone,
+        message,
+      },{ withCredentials: true})
+      console.log(res);
+      if(res.status === 201){
+        setUser({...user, message: ""})
+      }
+  };
 
   return (
     <>
@@ -59,7 +87,7 @@ function Contact() {
         <div className="get-in-touch-container">
           <div className="get-in-touch-content">
             <h1>Get In Touch</h1>
-            <form action="">
+            <form method="POST">
               <div className="row contact-container-items">
                 <input
                   type="text"
@@ -105,7 +133,11 @@ function Contact() {
                   placeholder="Your Message"
                 ></textarea>
               </div>
-              <button type="submit" onClick={} className="btn btn-primary">
+              <button
+                type="submit"
+                onClick={contactForm}
+                className="btn btn-primary"
+              >
                 Send Message
               </button>
             </form>

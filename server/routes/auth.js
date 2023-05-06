@@ -2,7 +2,7 @@ const { Router } = require("express");
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const authenticate = require("../middleware/authenticate")
+const authenticate = require("../middleware/authenticate");
 const router = express.Router();
 
 require("../db/conn");
@@ -131,15 +131,41 @@ router.post("/signin", async (req, res) => {
   }
 });
 
-router.get('/about', authenticate, (req, res)=>{
-console.log("Entered out of middleware of /about");
-// console.log(`ITEMS RX FROM MIDDLEWARE: ${req.token} + ${req.rootUser} + ${req.userID}`);
-res.status(200).send(req.rootUser);
+router.get("/about", authenticate, (req, res) => {
+  console.log("Entered out of middleware of /about");
+  // console.log(`ITEMS RX FROM MIDDLEWARE: ${req.token} + ${req.rootUser} + ${req.userID}`);
+  res.status(200).send(req.rootUser);
 });
 
-router.get('/getdata', authenticate, (req, res)=>{
-  console.log("Entered out of middleware of /contact");
+router.get("/getdata", authenticate, (req, res) => {
+  console.log("Entered out of middleware of /getdata");
   res.status(200).send(req.rootUser);
-})
+});
 
+router.post("/contact", authenticate, async (req, res) => {
+  console.log("Entered out of middleware of /contact");
+  
+  // console.log("Inside Contact");
+  // res.status(200).send("Bravo");
+  try {
+    console.log(req.body);
+    const { name, email, phone, message } = req.body;
+
+    if (!name || !email || !phone || !message) {
+      console.log("Did not provide all req fiels in the contact form");
+      return res.json("Did not provide all req fiels in the contact form");
+    }
+// Now what we want to do is that whatever message is rx here, we want to add that as a field inside the same user to whom this message belongs to. Now as in authenticate MDW - we have stored the _id of the user inside req.userID:
+const userContact = await User.findOne({ _id: req.userID });
+if(userContact){
+  const userMessage = await userContact.addMessage(name, email, phone, message);
+
+  await userContact.save();
+
+  res.status(201).json({msg: "User Contacts Successfully"})
+}else{
+  console.log("No Such user found");
+}
+  } catch (error) {}
+});
 module.exports = router;
