@@ -54,7 +54,7 @@ userSchema.methods.generateAuthToken = async function () {
       { signed_token_by_jwt: this._id, justForFunId: "FunID" },
       process.env.SECRET_KEY
     );
-    console.log("Token Created By generateAuthToken Method\n: " + signedToken);
+    console.log("Token Created By generateAuthToken Method: " + signedToken);
     // now we need to add the above token to the userSchema
     this.tokens = this.tokens.concat({ token: signedToken });
     await this.save();

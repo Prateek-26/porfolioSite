@@ -133,7 +133,7 @@ router.post("/signin", async (req, res) => {
 
 router.get('/about', authenticate, (req, res)=>{
 console.log("Entered out of middleware of /about");
-console.log(`ITEMS RX FROM MIDDLEWARE: ${req.token} + ${req.rootUser} + ${req.userID}`);
+// console.log(`ITEMS RX FROM MIDDLEWARE: ${req.token} + ${req.rootUser} + ${req.userID}`);
 res.status(200).send(req.rootUser);
 })
 

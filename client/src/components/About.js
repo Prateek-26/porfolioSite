@@ -11,10 +11,11 @@ function About() {
       const response = await axios.get("http://localhost:8080/about", {
         withCredentials: true,
       });
-      console.log(`Response collected @ REACT/about:\n ${response}`);
+    //   console.log(`Response collected @ REACT/about:\n ${response}`);
+    console.log(response);
       if (!response.status === 200) {
+          history("/signin");
         console.log("Error Detected");
-        history("/signin");
       }
     } catch (error) {
       console.log(error);
@@ -32,7 +33,7 @@ function About() {
         <form>
           <div className="row top-about">
             <div className="col-md-6">
-              <img src={person1img} alt="p1" height="200px" srcset="" />
+              <img src={person1img} alt="p1" height="200px" srcSet="" />
             </div>
 
             <div className="col-md-6">
@@ -74,7 +75,7 @@ function About() {
                   className="tabs__radio"
                   name="tabs-example"
                   id="tab1"
-                  checked
+                  defaultChecked
                 />
                 <label htmlFor="tab1" className="tabs__label">
                   About
