@@ -1,18 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import person1img from "../images/person1.jpg";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function About() {
   const history = useNavigate();
+  const [user, setUser] = useState({});
 
   const callAboutPage = async () => {
     try {
       const response = await axios.get("http://localhost:8080/about", {
         withCredentials: true,
       });
-    //   console.log(`Response collected @ REACT/about:\n ${response}`);
-    console.log(response);
+      console.log(response.data);
+    setUser(response.data)
       if (!response.status === 200) {
           history("/signin");
         console.log("Error Detected");
@@ -38,8 +39,8 @@ function About() {
 
             <div className="col-md-6">
               <div className="profile-head">
-                <h5>Marc Tyson</h5>
-                <h6>Web Developer</h6>
+                <h5>{user.name}</h5>
+                <h6>{user.work}</h6>
                 <p className="profile-rating mt-3 mb-5">
                   Rankings: <span>3/10</span>
                 </p>
@@ -83,22 +84,22 @@ function About() {
                 <div className="tabs__content">
                   <div className="tabs__content_content">
                     <div className="about-title">USER ID</div>
-                    <div className="about-title-value">123123</div>
+                    <div className="about-title-value">{user._id}</div>
                   </div>
 
                   <div className="tabs__content_content">
                     <div className="about-title">NAME</div>
-                    <div className="about-title-value">MARC TYSON</div>
+                    <div className="about-title-value">{user.name}</div>
                   </div>
 
                   <div className="tabs__content_content">
                     <div className="about-title">EMAIL</div>
-                    <div className="about-title-value">TEST@GMAIIL.COM</div>
+                    <div className="about-title-value">{user.email}</div>
                   </div>
 
                   <div className="tabs__content_content">
                     <div className="about-title">PHONE</div>
-                    <div className="about-title-value">123123029</div>
+                    <div className="about-title-value">{user.phone}</div>
                   </div>
 
                   <div className="tabs__content_content">
