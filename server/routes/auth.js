@@ -2,6 +2,7 @@ const { Router } = require("express");
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const authenticate = require("../middleware/authenticate")
 const router = express.Router();
 
 require("../db/conn");
@@ -90,6 +91,10 @@ router.post("/signin", async (req, res) => {
   try {
     const userExists = await User.findOne({ email: email });
 
+    // console.log(userExists);
+
+    // Returns the user details.
+
     if (userExists) {
       const isMatch = await bcrypt.compare(password, userExists.password); // returns a bool value
 
@@ -124,5 +129,9 @@ router.post("/signin", async (req, res) => {
     console.log("Error: " + err);
   }
 });
+
+router.get('/about', authenticate, (req, res)=>{
+console.log("Into about");
+})
 
 module.exports = router;

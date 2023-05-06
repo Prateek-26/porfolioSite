@@ -136,8 +136,8 @@ function Signup() {
           </div>
           <div className="col-sm-6 signup-image">
             <img src={loginPic} height="400px" alt="login" srcSet="" />
-            <NavLink to="/login">
-              <span>Already Loged In ?</span>
+            <NavLink to="/signin">
+              <span>Already Have an Account? ?</span>
             </NavLink>
           </div>
         </div>
