@@ -76,7 +76,7 @@ userSchema.methods.generateAuthToken = async function () {
     // here we'll generate the token;
     // token_id, justForFunId these cd be named anything! and is what the token will contain, with an automatic addition of _id
     let signedToken = jwt.sign(
-      { signed_token_by_jwt: this._id, justForFunId: "FunID" },
+      { signed_tokenid_by_jwt: this._id, justForFunId: "FunID" },
       process.env.SECRET_KEY
     );
     console.log("Token Created By generateAuthToken Method: " + signedToken);

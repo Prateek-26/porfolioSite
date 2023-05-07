@@ -10,7 +10,7 @@ const authenticate = async (req, res, next) => {
     // console.log(`deserialized token from cookie(MDW): \n ${verifiedToken}`);
 
     const rootUser = await User.findOne({
-      _id: verifiedToken.signed_token_by_jwt,
+      _id: verifiedToken.signed_tokenid_by_jwt,
       "tokens.token": tokenFromCookie,
     });
     // Now this rootUser is the one that actually logged in.
