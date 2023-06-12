@@ -46,7 +46,6 @@ const User = require("../model/userSchema");
 
 router.post("/signup", async (req, res) => {
   console.log(req.body);
-
   const { name, email, phone, work, password, cpassword } = req.body.user; // Destructuring the object
 
   if (!name || !email || !phone || !work || !password || !cpassword) {
